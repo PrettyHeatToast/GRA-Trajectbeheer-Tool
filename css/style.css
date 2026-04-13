@@ -49,6 +49,32 @@ header h1 {
   letter-spacing: 0.02em;
 }
 
+#programma-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#programma-nav label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+#programma-select {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#programma-select option {
+  background: var(--kleur-primair);
+  color: #fff;
+}
+
 #week-nav {
   display: flex;
   align-items: center;

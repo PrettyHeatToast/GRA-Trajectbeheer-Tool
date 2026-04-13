@@ -1,12 +1,25 @@
 // GRA Trajectbeheer Tool — Kernlogica
 
-const ICAL_URL = 'https://cloud.timeedit.net/ahs_be/web/teacher/ri650015Q89Z65Q0dn6t64015o948Zkj5Zly1ZnQQY72804Qj6205DA0E4977ZA284A10F6E50t100478082D47A6Q310.ics';
+const PROGRAMMA_URLS = {
+  AAD: 'https://cloud.timeedit.net/ahs_be/web/teacher/ri65n002Qw9Z60Q0Qt6n81k1549Q0Z6djY4y1ZwQ6Y705Y4X05oZ5QC00E22B6D888A7lBA2CZjF222E36E48AC5659t0E7C9.ics',
+  MCS: 'https://cloud.timeedit.net/ahs_be/web/teacher/ri65n502Qw9Z60Q0Qt6n81k5549Q0Z6djY4y1ZwQ6Y705Y4X05oZ5Q50892B76648831lB610Zj92E901BF8411C851t00CCF.ics',
+  TRL: 'https://cloud.timeedit.net/ahs_be/web/teacher/ri6Y0461yY5ZX6Q9nZ5Z0Q50544dQ92tn05Z6wYQQ77140jw5k480t484E0EQ099o21F5FB4506FlD0EA653E882Aj6Z8E8F093.ics',
+};
+
+// Groepcode-prefix per programma
+const GROEP_PREFIX = {
+  AAD: /^AADG_/,
+  MCS: /^MCS_/,
+  TRL: /^TRLG_/,
+};
+
 const DAGEN = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag'];
 const KALENDER_START_UUR = 7;   // 07:00
 const KALENDER_EIND_UUR = 20;   // 20:00
 const UUR_HOOGTE_PX = 48;       // pixels per uur
 
 // Staat
+let huidigProgramma = localStorage.getItem('programma') || 'AAD';
 let events = [];
 let cursusMap = new Map(); // courseName → Map<groupCode, Event[]>
 let keuze = new Map();     // courseName → groupCode | null
@@ -14,9 +27,18 @@ let huidigWeekStart = null;
 
 // ── iCal ophalen ─────────────────────────────────────────────
 
-async function laadRooster() {
+async function laadRooster(programma) {
+  huidigProgramma = programma;
+  localStorage.setItem('programma', programma);
+  keuze = new Map();
+
+  const statusEl = document.getElementById('laad-status');
+  if (statusEl) statusEl.textContent = 'Rooster ophalen…';
+  document.getElementById('cursus-paneel').innerHTML = '<p id="laad-status">Rooster ophalen…</p>';
+  document.getElementById('kalender').innerHTML = '';
+
   try {
-    const response = await fetch(ICAL_URL);
+    const response = await fetch(PROGRAMMA_URLS[programma]);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const tekst = await response.text();
     verwerkIcalTekst(tekst);
@@ -114,10 +136,11 @@ function extractCourseName(summary) {
 
 function extractGroepen(summary) {
   // iCal scheidt waarden binnen SUMMARY met \, (escaped komma)
+  const prefix = GROEP_PREFIX[huidigProgramma];
   return summary
     .split('\\,')
     .map(s => s.trim())
-    .filter(s => /^AADG_/.test(s));
+    .filter(s => prefix.test(s));
 }
 
 // ── Data opbouwen ─────────────────────────────────────────────
@@ -486,4 +509,8 @@ document.getElementById('laad-handmatig').addEventListener('click', () => {
   }
 });
 
-laadRooster();
+const programmaSelect = document.getElementById('programma-select');
+programmaSelect.value = huidigProgramma;
+programmaSelect.addEventListener('change', () => laadRooster(programmaSelect.value));
+
+laadRooster(huidigProgramma);
