@@ -193,6 +193,45 @@ function telConflicten(teCheckenEvents, geselecteerd) {
   return teller;
 }
 
+function telOverlapMinuten(teCheckenEvents, geselecteerd) {
+  // Bereken totale overlaptijd in minuten tussen twee reeksen events
+  let totaal = 0;
+  for (const ev of teCheckenEvents) {
+    for (const sel of geselecteerd) {
+      if (ev.uid !== sel.uid && heeftOverlap(ev, sel)) {
+        const overlapStart = Math.max(ev.start, sel.start);
+        const overlapEind = Math.min(ev.end, sel.end);
+        totaal += (overlapEind - overlapStart) / 60000;
+      }
+    }
+  }
+  return totaal;
+}
+
+function telTotaalOverlapMinuten(alleGeselecteerd) {
+  // Totale overlaptijd over alle geselecteerde events (elk paar één keer)
+  let totaal = 0;
+  for (let i = 0; i < alleGeselecteerd.length; i++) {
+    for (let j = i + 1; j < alleGeselecteerd.length; j++) {
+      const a = alleGeselecteerd[i], b = alleGeselecteerd[j];
+      if (a.uid !== b.uid && heeftOverlap(a, b)) {
+        const overlapStart = Math.max(a.start, b.start);
+        const overlapEind = Math.min(a.end, b.end);
+        totaal += (overlapEind - overlapStart) / 60000;
+      }
+    }
+  }
+  return totaal;
+}
+
+function formatUren(minuten) {
+  if (minuten === 0) return '0u';
+  const u = Math.floor(minuten / 60);
+  const m = Math.round(minuten % 60);
+  if (m === 0) return `${u}u`;
+  return `${u}u${String(m).padStart(2, '0')}`;
+}
+
 function vindConflicterendeUids(alleGeselecteerd) {
   const uids = new Set();
   for (let i = 0; i < alleGeselecteerd.length; i++) {
@@ -220,11 +259,11 @@ function renderCursusLijst() {
   for (const naam of cursussen) {
     const groepMap = cursusMap.get(naam);
     const gekozen = keuze.get(naam) || '';
-    const conflicten = gekozen
-      ? telConflicten(
-          groepMap.get(gekozen) || [],
-          geselecteerd.filter(ev => !(groepMap.get(gekozen) || []).includes(ev))
-        )
+    const geselecteerdZonderDeze = geselecteerd.filter(
+      ev => !(groepMap.get(gekozen) || []).includes(ev)
+    );
+    const overlapMin = gekozen
+      ? telOverlapMinuten(groepMap.get(gekozen) || [], geselecteerdZonderDeze)
       : 0;
 
     const kaart = document.createElement('div');
@@ -241,17 +280,14 @@ function renderCursusLijst() {
     leegOptie.textContent = '— kies een groep —';
     select.appendChild(leegOptie);
 
-    // Bereken conflictscore per groep voor de opties
-    const geselecteerdZonderDeze = geselecteerd.filter(
-      ev => !(groepMap.get(gekozen) || []).includes(ev)
-    );
-
     const groepen = [...groepMap.keys()].sort();
     for (const groep of groepen) {
-      const score = telConflicten(groepMap.get(groep), geselecteerdZonderDeze);
+      const min = telOverlapMinuten(groepMap.get(groep), geselecteerdZonderDeze);
       const optie = document.createElement('option');
       optie.value = groep;
-      optie.textContent = `${groep} — ${score} conflict${score !== 1 ? 'en' : ''}`;
+      optie.textContent = min === 0
+        ? `${groep} — geen overlap`
+        : `${groep} — ${formatUren(min)} overlap`;
       if (groep === gekozen) optie.selected = true;
       select.appendChild(optie);
     }
@@ -263,13 +299,13 @@ function renderCursusLijst() {
 
     kaart.appendChild(select);
 
-    // Conflict-badge voor de huidige keuze
+    // Overlap-badge voor de huidige keuze
     if (gekozen) {
       const badge = document.createElement('span');
-      badge.className = 'conflict-badge' + (conflicten > 0 ? ' heeft-conflicten' : '');
-      badge.textContent = conflicten === 0
-        ? '✓ geen conflicten'
-        : `⚠ ${conflicten} conflict${conflicten !== 1 ? 'en' : ''}`;
+      badge.className = 'conflict-badge' + (overlapMin > 0 ? ' heeft-conflicten' : '');
+      badge.textContent = overlapMin === 0
+        ? '✓ geen overlap'
+        : `⚠ ${formatUren(overlapMin)} overlap`;
       kaart.appendChild(badge);
     }
 
@@ -277,20 +313,17 @@ function renderCursusLijst() {
   }
 
   // Totaal
-  const totaal = geselecteerd.length > 0
-    ? vindConflicterendeUids(geselecteerd).size / 2
-    : 0;
   let footer = document.getElementById('conflict-totaal');
   if (!footer) {
     footer = document.createElement('div');
     footer.id = 'conflict-totaal';
     document.querySelector('main').after(footer);
   }
-  const aantalConflicten = vindConflicterendeUids(geselecteerd).size;
-  footer.className = aantalConflicten > 0 ? 'heeft-conflicten' : '';
-  footer.textContent = aantalConflicten === 0
+  const totaalMin = telTotaalOverlapMinuten(geselecteerd);
+  footer.className = totaalMin > 0 ? 'heeft-conflicten' : '';
+  footer.textContent = totaalMin === 0
     ? 'Geen overlappingen in huidig rooster'
-    : `⚠ ${aantalConflicten} overlappende les${aantalConflicten !== 1 ? 'sen' : ''} in huidig rooster`;
+    : `⚠ ${formatUren(totaalMin)} totale overlap in huidig rooster`;
 }
 
 // ── Kalender renderen ─────────────────────────────────────────
