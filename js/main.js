@@ -171,7 +171,8 @@ function geselecteerdeEvents() {
     const evs = groepMap.get(groepCode);
     if (evs) resultaat.push(...evs);
   }
-  return resultaat;
+  // Dedupliceer op uid (voorkomt valse conflicten bij dubbele iCal-entries)
+  return resultaat.filter((ev, i, arr) => arr.findIndex(e => e.uid === ev.uid) === i);
 }
 
 // ── Conflicten berekenen ──────────────────────────────────────
@@ -236,7 +237,7 @@ function vindConflicterendeUids(alleGeselecteerd) {
   const uids = new Set();
   for (let i = 0; i < alleGeselecteerd.length; i++) {
     for (let j = i + 1; j < alleGeselecteerd.length; j++) {
-      if (heeftOverlap(alleGeselecteerd[i], alleGeselecteerd[j])) {
+      if (alleGeselecteerd[i].uid !== alleGeselecteerd[j].uid && heeftOverlap(alleGeselecteerd[i], alleGeselecteerd[j])) {
         uids.add(alleGeselecteerd[i].uid);
         uids.add(alleGeselecteerd[j].uid);
       }
