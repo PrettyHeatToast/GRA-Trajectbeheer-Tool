@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GRA Trajectbeheer Tool</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <h1>GRA Trajectbeheer Tool</h1>
+    <div id="week-nav">
+      <button id="vorige-week">&lsaquo;</button>
+      <span id="week-label"></span>
+      <button id="volgende-week">&rsaquo;</button>
+    </div>
+  </header>
+
+  <div id="laad-melding" class="verborgen">
+    <p>Rooster laden mislukt. Plak de .ics-inhoud hieronder en klik op Laden.</p>
+    <textarea id="ics-invoer" rows="8" placeholder="Plak hier de inhoud van het .ics-bestand..."></textarea>
+    <button id="laad-handmatig">Laden</button>
+  </div>
+
+  <main>
+    <aside id="cursus-paneel">
+      <p id="laad-status">Rooster ophalen…</p>
+    </aside>
+    <section id="kalender-paneel">
+      <div id="kalender"></div>
+    </section>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
