@@ -1220,6 +1220,16 @@ document.getElementById('naar-fase1-van-fase0').addEventListener('click', () => 
     document.getElementById('student-opleiding').focus();
     return;
   }
+  const afstudeerrichtingVeld = document.getElementById('afstudeerrichting-veld');
+  if (!afstudeerrichtingVeld.classList.contains('verborgen') && !studentAfstudeerrichting) {
+    document.getElementById('student-afstudeerrichting').focus();
+    return;
+  }
+  const keuzetrajectVeld = document.getElementById('keuzetraject-veld');
+  if (!keuzetrajectVeld.classList.contains('verborgen') && !studentKeuzetraject) {
+    document.getElementById('student-keuzetraject').focus();
+    return;
+  }
   toonFase(1);
 });
 document.getElementById('terug-naar-fase0').addEventListener('click', () => toonFase(0));
