@@ -491,6 +491,10 @@ function vulKeuzetrajectOpties(vakken) {
     .filter(v => v.afstudeerrichting === studentAfstudeerrichting && v.keuzetraject)
     .map(v => v.keuzetraject)
   )].sort();
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = '— kies een keuzetraject —';
+  select.appendChild(placeholder);
   for (const t of trajecten) {
     const o = document.createElement('option');
     o.value = t; o.textContent = t;
@@ -499,8 +503,8 @@ function vulKeuzetrajectOpties(vakken) {
   if (trajecten.includes(studentKeuzetraject)) {
     select.value = studentKeuzetraject;
   } else {
-    studentKeuzetraject = trajecten[0] || '';
-    select.value = studentKeuzetraject;
+    studentKeuzetraject = '';
+    select.value = '';
   }
   document.getElementById('keuzetraject-veld')
     .classList.toggle('verborgen', trajecten.length === 0);
