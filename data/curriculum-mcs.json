@@ -1,0 +1,301 @@
+{
+    "opleiding": {
+        "naam": "Marketing- en Communicatiesupport",
+        "type": "Graduaat",
+        "onderwijsinstelling": "Arteveldehogeschool",
+        "studiepunten": 120
+    },
+    "vakken": [
+        {
+            "naam": "Bedrijfsorganisatie",
+            "studiepunten": 3,
+            "periode": [
+                "M1",
+                "M3"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Professionele communicatie",
+            "studiepunten": 4,
+            "periode": [
+                "M1",
+                "M3"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Kickstart MARCOM",
+            "studiepunten": 4,
+            "periode": [
+                "M1",
+                "M3"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Digitale tools",
+            "studiepunten": 3,
+            "periode": [
+                "M2",
+                "M4"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Marketingprincipes",
+            "studiepunten": 4,
+            "periode": [
+                "M2",
+                "M4"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Professional communication",
+            "studiepunten": 3,
+            "periode": [
+                "M2",
+                "M4"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Grafische skills",
+            "studiepunten": 5,
+            "periode": [
+                "M3",
+                "M1"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Content en socials",
+            "studiepunten": 3,
+            "periode": [
+                "M3",
+                "M1"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Communicatieprincipes",
+            "studiepunten": 4,
+            "periode": [
+                "M3",
+                "M1"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Online Marketingcommunicatie",
+            "studiepunten": 6,
+            "periode": [
+                "M4",
+                "M2"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Communication professionnelle",
+            "studiepunten": 3,
+            "periode": [
+                "M4",
+                "M2"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Professionele ontwikkeling 1A",
+            "studiepunten": 3,
+            "periode": [
+                "S1",
+                "S2"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Professionele ontwikkeling 1B",
+            "studiepunten": 3,
+            "periode": [
+                "S2",
+                "S1"
+            ],
+            "schijf": 1
+        },
+        {
+            "naam": "Werkplekleren 1",
+            "studiepunten": 12,
+            "periode": [
+                "J"
+            ],
+            "schijf": 1,
+            "exclusiefMet": ["Werkplekleren 1A", "Werkplekleren 1B"]
+        },
+        {
+            "naam": "Werkplekleren 1A",
+            "studiepunten": 5,
+            "periode": [
+                "S2"
+            ],
+            "schijf": 1,
+            "exclusiefMet": ["Werkplekleren 1"]
+        },
+        {
+            "naam": "Werkplekleren 1B",
+            "studiepunten": 7,
+            "periode": [
+                "S1"
+            ],
+            "schijf": 1,
+            "exclusiefMet": ["Werkplekleren 1"]
+        },
+        {
+            "naam": "Omnichannel marketing",
+            "studiepunten": 4,
+            "periode": [
+                "M1"
+            ],
+            "schijf": 2,
+            "afstudeerrichting": "MS",
+            "keuzetraject": "Marketing"
+        },
+        {
+            "naam": "Sales en marketing",
+            "studiepunten": 4,
+            "periode": [
+                "M1"
+            ],
+            "schijf": 2,
+            "afstudeerrichting": "MS",
+            "keuzetraject": "Commercial"
+        },
+        {
+            "naam": "Customer relations",
+            "studiepunten": 4,
+            "periode": [
+                "M1"
+            ],
+            "schijf": 2,
+            "afstudeerrichting": "MS"
+        },
+        {
+            "naam": "Meertalige marketingsupport",
+            "studiepunten": 6,
+            "periode": [
+                "M3","M1"
+            ],
+            "schijf": 2,
+            "afstudeerrichting": "MS"
+        },
+        {
+            "naam": "Marketingcampagne",
+            "studiepunten": 6,
+            "periode": [
+                "M3"
+            ],
+            "schijf": 2,
+            "afstudeerrichting": "MS",
+            "keuzetraject": "Marketing"
+        },
+        {
+            "naam": "Go-to-marketcampagne",
+            "studiepunten": 6,
+            "periode": [
+                "M3"
+            ],
+            "schijf": 2,
+            "afstudeerrichting": "MS",
+            "keuzetraject": "Commercial"
+        },
+        {
+            "naam": "Communicatiecampagne",
+            "studiepunten": 4,
+            "periode": [
+                "M1"
+            ],
+            "schijf": 2,
+            "afstudeerrichting": "CS"
+        },
+        {
+            "naam": "Meertalige communicatiesupport",
+            "studiepunten": 6,
+            "periode": [
+                "M1"
+            ],
+            "schijf": 2,
+            "afstudeerrichting": "CS"
+        },
+        {
+            "naam": "Keuzevak",
+            "studiepunten": 3,
+            "periode": [
+                "M1"
+            ],
+            "schijf": 2
+        },
+        {
+            "naam": "Werkplekleren 2",
+            "studiepunten": 14,
+            "periode": [
+                "M2",
+                "M4"
+            ],
+            "schijf": 2
+        },
+        {
+            "naam": "Professionele ontwikkeling 2",
+            "studiepunten": 3,
+            "periode": [
+                "S1","S2"
+            ],
+            "schijf": 2
+        },
+        {
+            "naam": "Multimediacommunicatie",
+            "studiepunten": 6,
+            "periode": [
+                "M3"
+            ],
+            "schijf": 2,
+            "afstudeerrichting": "CS"
+        },
+        {
+            "naam": "Copywriting",
+            "studiepunten": 4,
+            "periode": [
+                "M3"
+            ],
+            "schijf": 2,
+            "afstudeerrichting": "CS"
+        },
+        {
+            "naam": "Graduaatsproject",
+            "studiepunten": 3,
+            "periode": [
+                "M4",
+                "M2"
+            ],
+            "schijf": 2,
+            "inclusiefMet": ["Werkplekleren 3", "Professionele ontwikkeling 3"]
+        },
+        {
+            "naam": "Professionele ontwikkeling 3",
+            "studiepunten": 3,
+            "periode": [
+                "S2","S1"
+            ],
+            "schijf": 2,
+            "inclusiefMet": ["Graduaatsproject", "Werkplekleren 3"]
+        },
+        {
+            "naam": "Werkplekleren 3",
+            "studiepunten": 14,
+            "periode": [
+                "S2","S1"
+            ],
+            "schijf": 2,
+            "inclusiefMet": ["Graduaatsproject", "Professionele ontwikkeling 3"]
+        }
+    ]
+}

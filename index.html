@@ -9,19 +9,27 @@
 <body>
 
   <header>
-    <h1>GRA Trajectbeheer Tool</h1>
-    <div id="programma-nav">
-      <label for="programma-select">Opleiding</label>
-      <select id="programma-select">
-        <option value="AAD">GRA AAD</option>
-        <option value="MCS">GRA MCS</option>
-        <option value="TRL">GRA TRL</option>
-      </select>
+    <div class="header-links">
+      <h1>GRA Trajectbeheer Tool</h1>
     </div>
-    <div id="week-nav">
-      <button id="vorige-week">&lsaquo;</button>
-      <span id="week-label"></span>
-      <button id="volgende-week">&rsaquo;</button>
+    <div id="fase-indicator">
+      <span id="fase0-stap" class="wizard-stap actief">1 Gegevens</span>
+      <span class="wizard-pijl">&rsaquo;</span>
+      <span id="fase1-stap" class="wizard-stap">2 Traject</span>
+      <span class="wizard-pijl">&rsaquo;</span>
+      <span id="fase2-stap" class="wizard-stap">3 Rooster</span>
+    </div>
+    <div class="header-rechts">
+      <button id="naar-fase1-van-fase0" class="wizard-knop primair verborgen">Naar traject &rarr;</button>
+      <button id="terug-naar-fase0" class="wizard-knop verborgen">&larr; Terug naar gegevens</button>
+      <button id="naar-fase2" class="wizard-knop verborgen">Naar rooster &rarr;</button>
+      <button id="naar-fase1" class="wizard-knop verborgen">&larr; Terug naar traject</button>
+      <button id="exporteer-pdf" class="wizard-knop verborgen">&#8615; Exporteer PDF</button>
+      <div id="week-nav">
+        <button id="vorige-week">&lsaquo;</button>
+        <span id="week-label"></span>
+        <button id="volgende-week">&rsaquo;</button>
+      </div>
     </div>
   </header>
 
@@ -31,15 +39,105 @@
     <button id="laad-handmatig">Laden</button>
   </div>
 
-  <main>
-    <aside id="cursus-paneel">
-      <p id="laad-status">Rooster ophalen…</p>
-    </aside>
-    <section id="kalender-paneel">
-      <div id="kalender"></div>
-    </section>
+  <!-- FASE 0 (getoond als stap 1): Studentgegevens -->
+  <div id="fase0-paneel" class="verborgen">
+    <form id="gegevens-formulier" novalidate>
+      <div class="gegevens-veld">
+        <label for="student-naam">Naam</label>
+        <input type="text" id="student-naam" placeholder="Voornaam en naam" autocomplete="name">
+      </div>
+      <div class="gegevens-veld">
+        <label for="student-opleiding">Opleiding</label>
+        <select id="student-opleiding"></select>
+      </div>
+      <div class="gegevens-veld verborgen" id="afstudeerrichting-veld">
+        <label for="student-afstudeerrichting">Afstudeerrichting</label>
+        <select id="student-afstudeerrichting"></select>
+      </div>
+      <div class="gegevens-veld verborgen" id="keuzetraject-veld">
+        <label for="student-keuzetraject">Keuzetraject</label>
+        <select id="student-keuzetraject"></select>
+      </div>
+    </form>
+  </div>
+
+  <!-- FASE 1: Trajectplanner -->
+  <div id="fase1-paneel">
+
+    <div id="traject-layout">
+
+      <!-- Zijbalk: vakken per schijf in tabs -->
+      <aside id="vak-zijbalk">
+        <h2 class="zijbalk-titel">Op te nemen vakken</h2>
+        <div id="schijf-tabs">
+          <button class="schijf-tab actief" data-schijf="1">Schijf 1</button>
+          <button class="schijf-tab" data-schijf="2">Schijf 2</button>
+        </div>
+        <div id="vak-bak-1" class="vak-bak dropzone dropzone-zijbalk" data-schijf="1"></div>
+        <div id="vak-bak-2" class="vak-bak dropzone dropzone-zijbalk verborgen" data-schijf="2"></div>
+      </aside>
+
+      <!-- Tijdlijn: één academiejaar tegelijk -->
+      <div id="traject-tijdlijn">
+        <div id="huidig-jaar-blok">
+          <!-- Dynamisch gegenereerd door renderTijdlijn() -->
+        </div>
+      </div>
+
+    </div>
+
+    <div id="sp-overzicht">
+      <div class="sp-kaart">
+        <span class="sp-label">Behaald</span>
+        <span id="sp-behaald" class="sp-waarde">0 SP</span>
+      </div>
+      <div class="sp-kaart">
+        <span class="sp-label">Vrijgesteld</span>
+        <span id="sp-vrijgesteld" class="sp-waarde">0 SP</span>
+      </div>
+      <div class="sp-kaart">
+        <span class="sp-label">In traject</span>
+        <span id="sp-traject" class="sp-waarde">0 SP</span>
+      </div>
+      <div class="sp-kaart">
+        <span class="sp-label">Nog op te nemen</span>
+        <span id="sp-resterend" class="sp-waarde">0 SP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 2: Conflictcontrole -->
+  <main id="fase2-paneel" class="verborgen">
+    <div id="fase2-inhoud">
+      <aside id="cursus-paneel">
+        <h2 class="zijbalk-titel">Geselecteerde vakken</h2>
+        <div id="cursus-filter-tabs">
+          <button class="cursus-tab actief" data-schijf="1">Schijf 1</button>
+          <button class="cursus-tab" data-schijf="2">Schijf 2</button>
+        </div>
+        <div id="cursus-lijst">
+          <p id="laad-status">Rooster ophalen…</p>
+        </div>
+      </aside>
+      <section id="kalender-paneel">
+        <div id="kalender"></div>
+      </section>
+    </div>
+    <div id="rooster-chips">
+      <div class="sp-kaart" id="chip-conflicten-kaart">
+        <span class="sp-label">Conflicterende lessen</span>
+        <span id="chip-conflicten" class="sp-waarde">—</span>
+      </div>
+      <div class="sp-kaart" id="chip-uren-kaart">
+        <span class="sp-label">Totale overlaptijd</span>
+        <span id="chip-uren" class="sp-waarde">—</span>
+      </div>
+    </div>
   </main>
 
+  <script src="js/config.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

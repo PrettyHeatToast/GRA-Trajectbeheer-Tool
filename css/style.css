@@ -38,15 +38,25 @@ header {
   color: #fff;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 0 16px;
   flex-shrink: 0;
+  gap: 12px;
+}
+
+/* Linker zone: titel + opleiding-select */
+.header-links {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
 header h1 {
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 #programma-nav {
@@ -58,6 +68,7 @@ header h1 {
 #programma-nav label {
   font-size: 12px;
   opacity: 0.8;
+  white-space: nowrap;
 }
 
 #programma-select {
@@ -75,10 +86,24 @@ header h1 {
   color: #fff;
 }
 
+/* Rechter zone: wizard-knoppen + weeknavigatie */
+.header-rechts {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 #week-nav {
   display: flex;
   align-items: center;
   gap: 8px;
+  visibility: hidden; /* behoudt ruimte; zichtbaar via .week-nav-zichtbaar */
+}
+
+#week-nav.week-nav-zichtbaar {
+  visibility: visible;
 }
 
 #week-nav button {
@@ -147,20 +172,462 @@ header h1 {
 }
 
 /* ── Hoofd layout ── */
-main {
+#fase2-paneel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+#fase2-inhoud {
   display: flex;
   flex: 1;
   overflow: hidden;
 }
 
-/* ── Cursus-paneel (links) ── */
+/* ── Wizard navigatie ── */
+#fase-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.wizard-stap {
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.wizard-stap.actief {
+  background: rgba(255,255,255,0.9);
+  color: var(--kleur-primair);
+  font-weight: 600;
+}
+
+.wizard-pijl {
+  color: rgba(255,255,255,0.4);
+  font-size: 14px;
+}
+
+.wizard-knop {
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  white-space: nowrap;
+}
+
+.wizard-knop:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+.wizard-knop.primair {
+  background: rgba(255,255,255,0.9);
+  color: var(--kleur-primair);
+  font-weight: 600;
+  border-color: transparent;
+}
+
+.wizard-knop.primair:hover {
+  background: #fff;
+}
+
+/* ── Fase 0: studentgegevens ── */
+#fase0-paneel {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 16px;
+  overflow-y: auto;
+}
+
+#gegevens-formulier {
+  background: var(--kleur-wit);
+  border: 1px solid var(--kleur-rand);
+  border-radius: 8px;
+  padding: 32px;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gegevens-veld {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gegevens-veld label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--kleur-tekst);
+}
+
+.gegevens-veld input,
+.gegevens-veld select {
+  padding: 8px 10px;
+  border: 1px solid var(--kleur-rand);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--kleur-tekst);
+  background: var(--kleur-wit);
+}
+
+.gegevens-veld input:focus,
+.gegevens-veld select:focus {
+  outline: 2px solid var(--kleur-primair);
+  outline-offset: 1px;
+}
+
+/* ── Fase 1: trajectplanner ── */
+#fase1-paneel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #f3f4f6; /* gray-100, zelfde als TraTool */
+}
+
+/* Statistiekbalken (onderin fase 1 én fase 2) */
+#sp-overzicht,
+#rooster-chips {
+  display: grid;
+  gap: 12px;
+  padding: 12px 16px;
+  flex-shrink: 0;
+  background: var(--kleur-wit);
+  border-top: 1px solid var(--kleur-rand);
+}
+
+#sp-overzicht  { grid-template-columns: repeat(4, 1fr); }
+#rooster-chips { grid-template-columns: repeat(2, 1fr); }
+
+/* Conflict-staat voor chips in fase 2 */
+#rooster-chips .sp-kaart.heeft-conflicten {
+  background: var(--kleur-conflict-licht);
+  border-color: var(--kleur-conflict);
+}
+
+#rooster-chips .sp-kaart.heeft-conflicten .sp-label,
+#rooster-chips .sp-kaart.heeft-conflicten .sp-waarde {
+  color: var(--kleur-conflict);
+}
+
+.sp-kaart {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  background: #eff6ff;        /* blue-50 */
+  border: 1px solid #bfdbfe;  /* blue-200 */
+  border-radius: 8px;
+}
+
+.sp-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e3a8a;  /* blue-900 */
+  line-height: 1.3;
+}
+
+.sp-waarde {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e3a8a;  /* blue-900 */
+  line-height: 1.4;
+}
+
+/* Hoofdlayout fase 1 */
+#traject-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Tijdlijn */
+#traject-tijdlijn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 12px;
+  padding: 16px;
+}
+
+
+/* Jaar-blok = witte kaart met schaduw (zoals TraTool) */
+#huidig-jaar-blok {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--kleur-wit);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Module- en semesterrijen */
+.modules-rij {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.semesters-rij {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.jaar-rij {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.periode-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.periode-slot h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151; /* gray-700 */
+}
+
+/* Dropzones — stijl van TraTool */
+.dropzone {
+  border: 2px dashed #9ca3af; /* gray-400 */
+  border-radius: 8px;
+  padding: 8px;
+  min-height: 120px;
+  background: #f9fafb; /* gray-50 */
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.semesters-rij .dropzone,
+.jaar-rij .dropzone {
+  min-height: 48px;
+}
+
+.dropzone.dropzone-zijbalk {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  min-height: unset;
+}
+
+.dropzone.drag-geldig {
+  background: #dcfce7 !important;  /* green-100 */
+  border-color: #22c55e !important; /* green-500 */
+}
+
+.dropzone.drag-ongeldig {
+  background: #fee2e2 !important;  /* red-100 */
+  border-color: #ef4444 !important; /* red-500 */
+}
+
+/* Vak-zijbalk */
+#vak-zijbalk {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--kleur-wit);
+  border-right: 1px solid var(--kleur-rand);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.zijbalk-titel {
+  font-size: 18px;
+  font-weight: 700;
+  color: #374151; /* gray-700 */
+  padding: 16px 16px 0;
+}
+
+#schijf-tabs,
+#cursus-filter-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--kleur-rand);
+  flex-shrink: 0;
+  margin-top: 10px;
+}
+
+.schijf-tab,
+.cursus-tab {
+  flex: 1;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--kleur-tekst-zacht);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.schijf-tab:hover,
+.cursus-tab:hover {
+  color: var(--kleur-tekst);
+}
+
+.schijf-tab.actief,
+.cursus-tab.actief {
+  color: var(--kleur-primair);
+  border-bottom-color: var(--kleur-primair);
+}
+
+.vak-bak {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Vakkaarten — stijl van TraTool */
+.vak-kaart {
+  background: var(--kleur-wit);
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  cursor: grab;
+  user-select: none;
+}
+
+.vak-kaart:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.vak-kaart:active {
+  cursor: grabbing;
+}
+
+.vak-kaart.behaald,
+.vak-kaart.vrijgesteld {
+  background: #e5e7eb; /* gray-200 */
+  cursor: default;
+}
+
+.vak-kaart.in-traject {
+  padding: 6px 10px;
+}
+
+/* Kaartinhoud: flex rij (info links, checkbox rechts) */
+.vak-kaart-rij {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.vak-kaart-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.vak-kaart-naam {
+  font-weight: 500;
+  font-size: 13px;
+  color: #1f2937; /* gray-800 */
+  line-height: 1.3;
+}
+
+.vak-kaart.behaald .vak-kaart-naam,
+.vak-kaart.vrijgesteld .vak-kaart-naam {
+  color: #6b7280; /* gray-500 */
+}
+
+.vak-kaart-details {
+  font-size: 12px;
+  color: #6b7280; /* gray-500 */
+}
+
+/* Actieknoppen (Behaald / Vrijstelling) */
+.vak-acties {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.vak-actie-knop {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+  background: var(--kleur-wit);
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.vak-actie-knop:hover {
+  border-color: #9ca3af;
+  color: #6b7280;
+}
+
+.vak-actie-knop.actief-behaald {
+  background: var(--kleur-primair);
+  border-color: var(--kleur-primair);
+  color: #fff;
+}
+
+.vak-actie-knop.actief-vrijgesteld {
+  background: var(--kleur-plenair);
+  border-color: var(--kleur-plenair);
+  color: #fff;
+}
+
+.zijbalk-leeg {
+  font-size: 12px;
+  color: #9ca3af; /* gray-400 */
+  text-align: center;
+  padding: 16px 8px;
+}
+
+/* ── Cursus-paneel (links, fase 2) ── */
 #cursus-paneel {
   width: 280px;
   flex-shrink: 0;
   background: var(--kleur-wit);
   border-right: 1px solid var(--kleur-rand);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#cursus-lijst {
+  flex: 1;
   overflow-y: auto;
-  padding: 12px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -173,22 +640,39 @@ main {
 }
 
 .cursus-kaart {
-  border: 1px solid var(--kleur-rand);
-  border-radius: 6px;
-  padding: 10px 12px;
   background: var(--kleur-wit);
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cursus-kaart:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+/* Bovenste rij: naam links, overlap-badge rechts */
+.cursus-kaart-rij {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .cursus-naam {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 13px;
-  margin-bottom: 6px;
-  color: var(--kleur-tekst);
+  color: #1f2937;
+  line-height: 1.3;
+  min-width: 0;
 }
 
 .cursus-kaart select {
   width: 100%;
-  padding: 5px 8px;
+  padding: 3px 6px;
   border: 1px solid var(--kleur-rand);
   border-radius: 4px;
   font-size: 12px;
