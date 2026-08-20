@@ -840,12 +840,14 @@ function schijfVanVak(vakNaam) {
 // Geeft null terug als het vak niet gevonden is, niet geplaatst is, of slechts één periode heeft.
 function periodeIndexVanVak(vakNaam) {
   if (!curriculumData || !curriculumData.vakken) return null;
-  const slot = trajectState[vakNaam];
-  if (!slot || slot === 'zijbalk' || slot === 'behaald' || slot === 'vrijgesteld') return null;
 
   const genorm = normaliseerVakNaam(vakNaam);
   const vak = curriculumData.vakken.find(v => normaliseerVakNaam(v.naam) === genorm);
   if (!vak || !vak.periode || vak.periode.length <= 1) return null;
+
+  // trajectState is gesleuteld op de curriculumnaam; vakNaam kan de iCal-naam zijn
+  const slot = trajectState[vak.naam];
+  if (!slot || slot === 'zijbalk' || slot === 'behaald' || slot === 'vrijgesteld') return null;
 
   // Haal de periode uit het slot-id: "j1-m3" → "M3"
   const deelPeriode = slot.split('-').slice(1).join('-').toUpperCase();
@@ -862,6 +864,15 @@ function groepHoortBijPeriode(groepCode, vakNaam) {
   if (idx === null) return true;
   const isFeb = groepCode.includes('FEB');
   return idx === 0 ? !isFeb : isFeb;
+}
+
+// Geeft de selecteerbare groepen voor een vak.
+// De periodefilter vervalt als die alle groepen zou wegfilteren: niet elk vak
+// heeft in het rooster zowel een FEB- als een niet-FEB-variant.
+function groepenVoorVak(vakNaam, groepMap) {
+  const basis = [...groepMap.keys()].sort().filter(groepHoortBijStudent);
+  const opPeriode = basis.filter(g => groepHoortBijPeriode(g, vakNaam));
+  return opPeriode.length > 0 ? opPeriode : basis;
 }
 
 // ── Cursus-schijf wisselen (fase 2 sidebar) ───────────────────
@@ -901,9 +912,7 @@ function renderCursusLijst() {
   // Pre-pass: automatisch selecteren als er maar één groep beschikbaar is
   for (const naam of cursussen) {
     if (!keuze.has(naam) || keuze.get(naam)) continue;
-    const groepen = [...cursusMap.get(naam).keys()].sort()
-      .filter(groepHoortBijStudent)
-      .filter(g => groepHoortBijPeriode(g, naam));
+    const groepen = groepenVoorVak(naam, cursusMap.get(naam));
     if (groepen.length === 1) keuze.set(naam, groepen[0]);
   }
 
@@ -950,9 +959,7 @@ function renderCursusLijst() {
     kaart.appendChild(rij);
 
     const select = document.createElement('select');
-    const groepen = [...groepMap.keys()].sort()
-      .filter(groepHoortBijStudent)
-      .filter(g => groepHoortBijPeriode(g, naam));
+    const groepen = groepenVoorVak(naam, groepMap);
 
     // Placeholder enkel tonen als er een echte keuze te maken valt
     if (groepen.length !== 1) {
