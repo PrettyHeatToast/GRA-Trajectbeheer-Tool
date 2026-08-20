@@ -9,9 +9,9 @@ const CONFIG = {
   // iCal-URLs per programma (gegenereerd door TimeEdit)
   // Vervang deze bij het begin van elk academiejaar.
   programmaUrls: {
-    AAD: 'https://cloud.timeedit.net/ahs_be/web/teacher/ri650015Q39Z65Q0dn6t64015o948Zkj5Zly1ZnQQY72804Qj620530E24AABZ00858AE55809t2A638340FFEAFEQ7.ics',
+    AAD: 'https://cloud.timeedit.net/ahs_be/web/teacher/ri65n002Qw9Z60Q0Qt6n31k1549Q0Z6djY4y1ZwQ6Y705Y4X05oZ5QF00AF1D6DB883AlB5FCZjB244605338CD7558t06F41.ics',
     MCS: 'https://cloud.timeedit.net/ahs_be/web/teacher/ri65n502Qw9Z60Q0Qt6n81k5549Q0Z6djY4y1ZwQ6Y705Y4X05oZ5Q50892B76648831lB610Zj92E901BF8411C851t00CCF.ics',
-    TRL: 'https://cloud.timeedit.net/ahs_be/web/teacher/ri6Y0461yY5ZX6Q9nZ5Z0Q50544dQ92tn05Z6wYQQ77140jw5k480t484E0EQ099o21F5FB4506FlD0EA653E882Aj6Z8E8F093.ics',
+    TRL: 'https://cloud.timeedit.net/ahs_be/web/teacher/ri6Y0461yY5ZX6Q9nZ5Z0Q50544dQ92tn05Z6wYQQ77140jw5k430t98E093Q092o2C05AF93066lB680E080628Cj1Z87D4EB71.ics',
   },
 
   // Volledige naam per programmacode (gebruikt in UI en PDF-export)
