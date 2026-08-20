@@ -23,9 +23,9 @@ const CONFIG = {
 
   // Regex die groepscodes per programma herkent in de iCal SUMMARY
   groepPrefix: {
-    AAD: /^AADG_/,
+    AAD: /^AAD_/,
     MCS: /^MCS_/,
-    TRL: /^TRLG_/,
+    TRL: /^TRL_/,
   },
 
   // Handmatige naam-mapping: iCal-cursusnaam → cursusnaam in het curriculum.
